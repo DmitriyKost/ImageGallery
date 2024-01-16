@@ -14,7 +14,7 @@ function uploadImage(file) {
     const formData = new FormData();
     formData.append("image", file);
 
-    fetch("http://127.0.0.1:8080/upload/", {
+    fetch("/upload", {
         method: "POST",
         body: formData,
     })

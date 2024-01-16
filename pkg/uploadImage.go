@@ -29,7 +29,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
     defer file.Close()
 
     // Create a new file on the server
-    newFile, err := os.Create("../static/images/" + handler.Filename)
+    newFile, err := os.Create("static/images/" + handler.Filename)
     if err != nil {
         http.Error(w, "Error creating file", http.StatusInternalServerError)
         return

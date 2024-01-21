@@ -8,9 +8,16 @@
     <title>Journal</title>
 </head>
 <body>
+    <div class="top-right-refs">
+        <a href="/">HomePage</a>
+        <a href="/projects">Projects</a>
+        <a href="/about">About</a>
+    </div>
     <h1 style="text-align: center;">Journal</h1>
+    <div class="column">
     {{range .ImagePaths}}
-        <img src="{{.}}" alt="Image">
+        <img src="{{.}}" class="gallery-item" width="50%" alt="Image">
     {{end}}
+    </div>
 </body>
 </html>

@@ -16,8 +16,9 @@
     <h1 style="text-align: center;">Journal</h1>
     <div class="column">
     {{range .ImagePaths}}
-        <img src="{{.}}" class="gallery-item" width="50%" alt="Image">
+        <a onclick="onClick()"><img src="{{.}}" class="gallery-item" width="100%" onclick="Onclick()" alt="Image"></a>
     {{end}}
     </div>
+    <script src="static/js/imageOnClick.js"></script>
 </body>
 </html>

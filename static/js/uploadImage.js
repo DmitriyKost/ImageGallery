@@ -1,4 +1,4 @@
-const uploadBtn = document.getElementById("btn1");
+const uploadBtn = document.getElementById("uploadbtn");
 const imageInput = document.getElementById("imageInput");
 uploadBtn.addEventListener("click", function () {
     // Trigger click on the hidden file input when the button is clicked

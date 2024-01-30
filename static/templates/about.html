@@ -4,7 +4,81 @@
     <title>About</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="static/css/about.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: auto;
+            padding: 50px;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #666;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .top-right-refs {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 20px;
+            color: black;
+        }
+
+        .top-right-refs a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 1s;
+        }
+
+        .top-right-refs a:hover {
+            color: blue;
+        }
+    </style>
 </head>
 <body>
     <div class="top-right-refs">
@@ -12,7 +86,32 @@
         <a href="/projects">Projects</a>
         <a href="/journal">Journal</a>
     </div>
-
     <h1 style="text-align: center;">About</h1>
+        <p>Welcome to our website! We are a passionate team dedicated to [your mission or purpose]. Lorem ipsum dolor sit
+            amet, consectetur adipiscing elit. Nullam varius tellus sit amet nulla fringilla, vel gravida quam
+            tincidunt.</p>
+
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc at sapien et metus dignissim porta vitae vel
+            ipsum. Quisque vel lectus nec nisi gravida tristique. Aenean non massa et dolor fermentum sagittis. Integer
+            facilisis justo vel turpis aliquet, sit amet hendrerit erat tristique.</p>
+
+        <p>Feel free to explore our website and learn more about our team and the services we offer. If you have any
+            questions or would like to get in touch, please don't hesitate to contact us.</p>
+
+    <script src="static/js/login.js"></script>
+    <a onclick="openPopup()" style="text-decoration:underline; color: blue; cursor:pointer;">Are you administrator?</a>
+    <div class="overlay" id="overlay">
+        <div class="popup">
+            <form>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+
+                <button type="button" onclick="login()">Login</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

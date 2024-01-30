@@ -47,6 +47,10 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
     renderTemplate(w, "about.html", nil)
 }
 
+func AdminHandler(w http.ResponseWriter, r *http.Request) {
+    renderTemplate(w, "admin_page.html", nil)
+}
+
 func renderTemplate(w http.ResponseWriter, tmpl string, data any) {
     err := templates.ExecuteTemplate(w, tmpl, data)
     if err != nil {

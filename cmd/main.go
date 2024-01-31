@@ -20,5 +20,7 @@ func main() {
     http.HandleFunc("/about", pkg.AboutHandler)
     http.HandleFunc("/login", pkg.Login)
     http.Handle("/admin", pkg.AuthMiddleWare(http.HandlerFunc(pkg.AdminHandler)))
+    http.Handle("/upload", pkg.AuthMiddleWare(http.HandlerFunc(pkg.UploadHandler)))
+    http.Handle("/replace_idx", pkg.AuthMiddleWare(http.HandlerFunc(pkg.ReplaceIndexImageHandler)))
     http.ListenAndServe(":8080", nil)
 }

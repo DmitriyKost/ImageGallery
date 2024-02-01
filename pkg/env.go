@@ -3,7 +3,17 @@ package pkg
 import (
 	"fmt"
 	"os"
+
+	"github.com/joho/godotenv"
 )
+
+func init() { 
+    if err := godotenv.Load("creds.env"); err != nil {
+        panic("Error loading credentials")
+    }
+    InitEnv()
+}
+
 
 func InitEnv() {
     jwtKey = []byte(getEnv("JWT_KEY"))

@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -89,7 +90,7 @@ func ReplaceIndexImageHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    response := Response{Message: "Image uploaded successfully"}
+    response := Response{Message: "Image replaced successfully"}
     jsonResponse, err := json.Marshal(response)
     if err != nil {
         http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
@@ -98,4 +99,24 @@ func ReplaceIndexImageHandler(w http.ResponseWriter, r *http.Request) {
 
     w.Header().Set("Content-Type", "application/json")
     w.Write(jsonResponse)
+}
+
+func DeleteHandler(w http.ResponseWriter, r *http.Request) {
+    if r.Method != http.MethodDelete {
+        http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+        return
+    }
+    body, err := io.ReadAll(r.Body)
+    if err != nil {
+        http.Error(w, "Error reading request body", http.StatusInternalServerError)
+    }
+    imgPath := string(body)
+    er := os.Remove(imgPath)
+    if er != nil {
+        http.Error(w, fmt.Sprintf("Error deleting image: %s", er), http.StatusInternalServerError)
+        return
+    }
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusOK)
+    w.Write([]byte(`{"message: Image deleted"}`))
 }

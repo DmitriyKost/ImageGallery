@@ -11,7 +11,7 @@ import (
 
 var templates = template.Must(template.ParseGlob("static/templates/*.html"))
 
-type JournalImages struct {
+type Images struct {
 	ImagePaths []string
 }
 
@@ -39,7 +39,7 @@ func JournalHandler(w http.ResponseWriter, r *http.Request) {
         http.Error(w, "Error reading journal image directory", http.StatusInternalServerError)
         return
     }
-    pageVariables := JournalImages { ImagePaths: imgPaths }
+    pageVariables := Images { ImagePaths: imgPaths }
     renderTemplate(w, "journal.html", pageVariables)
 }
 
@@ -48,7 +48,12 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminHandler(w http.ResponseWriter, r *http.Request) {
-    renderTemplate(w, "admin_page.html", nil)
+    err, allImages := getAllImages();
+    if err != nil {
+        http.Error(w, "Error getting all images", http.StatusInternalServerError)
+        return
+    }
+    renderTemplate(w, "admin_page.html", Images { ImagePaths: allImages })
 }
 
 func renderTemplate(w http.ResponseWriter, tmpl string, data any) {
@@ -86,7 +91,7 @@ func getIndexImage() (string, error) {
         return "", err
     }
     if len(matches) < 1 {
-        fmt.Printf("There's no index image")
+        fmt.Println("There's no index image")
         return "", nil
     }
     if len(matches) > 1 {
@@ -94,4 +99,23 @@ func getIndexImage() (string, error) {
         return matches[0], nil
     }
     return matches[0], nil
+}
+
+func getAllImages() (error, []string) {
+    var images []string
+    err := filepath.Walk("static/images", func(path string, info os.FileInfo, err error) error {
+        if err != nil {
+            return err
+        }
+
+        if !info.IsDir() {
+            images = append(images, path)
+        }
+        return nil
+    })
+    if err != nil {
+        fmt.Println("Error while getting all images")
+        return err, nil
+    }
+    return nil, images
 }

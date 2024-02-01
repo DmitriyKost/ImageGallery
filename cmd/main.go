@@ -1,26 +1,17 @@
 package main
 
 import (
-    "net/http"
-    "github.com/joho/godotenv"
-    "github.com/DmitriyKost/ImageGallery/pkg"
+	"log"
+	"net/http"
+
+	"github.com/DmitriyKost/ImageGallery/pkg"
 )
-func init() { 
-    if err := godotenv.Load("creds.env"); err != nil {
-        panic("Error loading credentials")
-    }
-    pkg.InitEnv()
-}
+
 
 func main() {
-    http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-    http.HandleFunc("/", pkg.IndexHandler)
-    http.HandleFunc("/journal", pkg.JournalHandler)
-    http.HandleFunc("/projects", pkg.ProjectsHandler)
-    http.HandleFunc("/about", pkg.AboutHandler)
-    http.HandleFunc("/login", pkg.Login)
-    http.Handle("/admin", pkg.AuthMiddleWare(http.HandlerFunc(pkg.AdminHandler)))
-    http.Handle("/upload", pkg.AuthMiddleWare(http.HandlerFunc(pkg.UploadHandler)))
-    http.Handle("/replace_idx", pkg.AuthMiddleWare(http.HandlerFunc(pkg.ReplaceIndexImageHandler)))
-    http.ListenAndServe(":8080", nil)
+    pkg.InitRoutes();
+    err := http.ListenAndServe(":8080", nil)
+    if err != nil {
+        log.Println("Error listening on :8080")
+    }
 }

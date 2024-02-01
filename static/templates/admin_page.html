@@ -7,11 +7,30 @@
         <link href="static/css/admin_page.css" rel="stylesheet">
     </head>
     <body>
+       <div class="top-right-refs">
+            <a href="/">HomePage</a>
+            <a href="/projects">Projects</a>
+            <a href="/journal">Journal</a>
+            <a href="/about">About</a>
+        </div>
+
         <input type="file" id="imageInput" style="display: none">
         <button type="button" id="uploadbtn">Upload image to journal</button>
 
         <input type="file" id="replaceImg" style="display: none">
         <button type="button" id="replacebtn">Replace index image</button>
+
+        <button type="button" onclick="openPopup()">Delete image</button>
+        <div class="overlay" id="overlay">
+            <div class="popup">
+                {{range .ImagePaths}}
+                    <a onclick="deleteImage({{.}})"><img src="{{.}}" alt="" width="5%">{{.}}</a>
+                    <p></p>
+                {{end}}
+                <button type="button" class="bottom-right-button" onclick="closePopup()">Close</button>
+            </div>
+        </div>
         <script src="static/js/uploadImage.js"></script>
+        <script src="static/js/login.js"></script>
     </body>
 </html>

@@ -32,6 +32,7 @@ function uploadImage(file) {
     .then(response => response.json())
     .then(data => {
         console.log(data);
+        window.location.reload();
         alert("Image uploaded");
     })
     .catch(error => {
@@ -51,10 +52,32 @@ function replaceImage(file) {
     .then(response => response.json())
     .then(data => {
         console.log(data);
+        window.location.reload();
         alert("Image uploaded");
     })
     .catch(error => {
         console.error(error);
-        alert("Error while uploading image");
+        alert("Error uploading image");
     });
+}
+
+function deleteImage(imgPath) {
+    const userConfirmed = window.confirm("Are you sure you want to delete this image?");
+
+    if (!userConfirmed) {
+        return;
+    }
+    const path = imgPath
+    fetch("/delete_image", {
+        method: "DELETE",
+        body: path,
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        alert("Image deleted");
+    })
+    .catch(error => {
+        window.location.reload();
+    })
 }

@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="static/css/journal.css" rel="stylesheet">
-    <title>Journal</title>
+    <link href="static/css/videos.css" rel="stylesheet">
+    <title>Videos</title>
 </head>
 <body>
     <div class="top-right-refs">
@@ -13,10 +13,10 @@
         <a href="/projects">Projects</a>
         <a href="/about">About</a>
     </div>
-    <h1 style="text-align: center;">Journal</h1>
+    <h1 style="text-align: center;">Videos</h1>
     <div class="column">
     {{range .ImagePaths}}
-        <a onclick="onClick()"><img src="{{.}}" width="100%" alt="Image"></a>
+        <a onclick="onClick()"><img src="{{.}}" class="gallery-item" width="100%" alt="Image"></a>
     {{end}}
         <video width="100%" controls>
             <source src="/static/videos/MVI_8282.AVI">

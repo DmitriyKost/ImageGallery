@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "github.com/DmitriyKost/ImageGallery/env"
 	"log"
 	"net/http"
 

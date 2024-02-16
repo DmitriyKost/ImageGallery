@@ -21,9 +21,9 @@ replaceInp.addEventListener("change", function () {
     replaceImage(this.files[0]);
 });
 
-function uploadImage(file) {
+function uploadItem(file) {
     const formData = new FormData();
-    formData.append("image", file);
+    formData.append("item", file);
 
     fetch("/upload", {
         method: "POST",
@@ -33,11 +33,11 @@ function uploadImage(file) {
     .then(data => {
         console.log(data);
         window.location.reload();
-        alert("Image uploaded");
+        alert("Item uploaded");
     })
     .catch(error => {
         console.error(error);
-        alert("Error while uploading image");
+        alert("Error while uploading item");
     });
 }
 

@@ -3,16 +3,20 @@ package pkg
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var jwtKey []byte
+var jwtKey []byte = []byte(os.Getenv("JWT_KEY"))
 
-var users map[string]string
+
+var users map[string]string = map[string]string {
+	os.Getenv("ADMIN_LOGIN"): os.Getenv("ADMIN_PASSWORD"),
+    }
+
 
 type Credentials struct {
 	Password string `json:"password"`
@@ -91,38 +95,8 @@ func AuthMiddleWare(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
     })
 }
-// func Welcome(w http.ResponseWriter, r *http.Request) {
-// 	c, err := r.Cookie("token")
-// 	if err != nil {
-// 		if err == http.ErrNoCookie {
-// 			w.WriteHeader(http.StatusUnauthorized)
-// 			return
-// 		}
-// 		w.WriteHeader(http.StatusBadRequest)
-// 		return
-// 	}
-//
-// 	tknStr := c.Value
-//
-// 	claims := &Claims{}
-//
-// 	tkn, err := jwt.ParseWithClaims(tknStr, claims, func(token *jwt.Token) (any, error) {
-// 		return jwtKey, nil
-// 	})
-// 	if err != nil {
-// 		if err == jwt.ErrSignatureInvalid {
-// 			w.WriteHeader(http.StatusUnauthorized)
-// 			return
-// 		}
-// 		w.WriteHeader(http.StatusBadRequest)
-// 		return
-// 	}
-// 	if !tkn.Valid {
-// 		w.WriteHeader(http.StatusUnauthorized)
-// 		return
-// 	}
-// 	w.Write([]byte(fmt.Sprintf("Welcome %s!", claims.Username)))
-// }
+
+
 func Refresh(w http.ResponseWriter, r *http.Request) {
 	c, err := r.Cookie("token")
 	if err != nil {
@@ -180,8 +154,4 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 		Name:    "token",
 		Expires: time.Now(),
 	})
-}
-
-func Protected(w http.ResponseWriter, r* http.Request) {
-    fmt.Fprintf(w, "Congrat's you got the access")
 }

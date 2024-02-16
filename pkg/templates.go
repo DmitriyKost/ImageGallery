@@ -19,6 +19,10 @@ type IndexImage struct {
     Path string
 }
 
+type Videos struct {
+    VideoPaths []string
+}
+
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
     imgPath, err := getIndexImage()
     if err != nil {
@@ -118,4 +122,22 @@ func getAllImages() (error, []string) {
         return err, nil
     }
     return nil, images
+}
+
+func getAllVideos() (error, []string) {
+    var videos []string
+    err := filepath.Walk("static/videos", func(path string, info os.FileInfo, err error) error {
+        if err != nil {
+            return err
+        }
+        if !info.IsDir() {
+            videos = append(videos, path)
+        }
+        return nil
+    })
+    if err != nil {
+        fmt.Println("Error while getting all videos")
+        return err, nil
+    }
+    return nil, videos
 }

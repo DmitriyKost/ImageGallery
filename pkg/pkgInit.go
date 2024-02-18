@@ -2,7 +2,15 @@ package pkg
 
 import (
 	"net/http"
+	"github.com/DmitriyKost/ImageGallery/pkg/database"
 )
+
+func init() {
+    err := database.InitDatabase()
+    if err != nil {
+        panic(err)
+    }
+}
 
 func InitRoutes() {
     http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))

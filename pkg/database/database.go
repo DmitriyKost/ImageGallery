@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 	"sync"
-
+    _ "github.com/DmitriyKost/ImageGallery/env"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -34,7 +34,7 @@ func InitDatabase() error {
 	}
     var err error
 	Database, err = sql.Open("sqlite3", DataBasePath)
-	data, err := os.ReadFile("./pkg/batabase/migrations.sql")
+	data, err := os.ReadFile("./config/migrations.sql")
 	if err != nil {
 		return err
 	}

@@ -5,8 +5,12 @@ import (
 )
 
 
-func init() { 
-    if err := godotenv.Load("creds.env", "variables.env"); err != nil {
+func init() {
+    InitEnv()
+}
+
+func InitEnv() {
+    if err := godotenv.Load("config/creds.env", "config/variables.env"); err != nil {
         panic("Error loading environment")
     }
 }

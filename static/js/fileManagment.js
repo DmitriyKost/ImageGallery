@@ -7,7 +7,7 @@ uploadBtn.addEventListener("click", function () {
 
 imageInput.addEventListener("change", function () {
     // Handle file selection and upload
-    uploadImage(this.files[0]);
+    uploadItem(this.files[0]);
 });
 const replaceBtn = document.getElementById("replacebtn");
 const replaceInp = document.getElementById("replaceImg");
@@ -62,20 +62,20 @@ function replaceImage(file) {
 }
 
 function deleteImage(imgPath) {
-    const userConfirmed = window.confirm("Are you sure you want to delete this image?");
+    const userConfirmed = window.confirm("Are you sure you want to delete this item?");
 
     if (!userConfirmed) {
         return;
     }
     const path = imgPath
-    fetch("/delete_image", {
+    fetch("/delete", {
         method: "DELETE",
         body: path,
     })
     .then(response => response.json())
     .then(data => {
         console.log(data);
-        alert("Image deleted");
+        alert("Item deleted");
     })
     .catch(error => {
         window.location.reload();

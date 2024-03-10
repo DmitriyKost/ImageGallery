@@ -14,7 +14,13 @@
     </div>
     <h1 style="text-align: center;">Valeriy Taouk</h1>
     <div style="text-align: center;">
-        <img width="700" src={{ .Path }}>
+        {{ with .Path }}
+            <img width="700" src={{ . }}>
+        {{else}}
+            <script>
+                alert("There's no index image please upload one")
+            </script>
+        {{end}}
     </div>
 </body>
 </html>

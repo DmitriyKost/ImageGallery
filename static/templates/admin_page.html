@@ -15,17 +15,23 @@
         </div>
 
         <input type="file" id="imageInput" style="display: none">
-        <button type="button" id="uploadbtn">Upload image to journal</button>
+        <button type="button" id="uploadbtn">Upload image/video to journal</button>
 
         <input type="file" id="replaceImg" style="display: none">
-        <button type="button" id="replacebtn">Replace index image</button>
+        <button type="button" id="replacebtn">Replace/Upload index image</button>
 
         <button type="button" onclick="openPopup()">Delete image</button>
         <div class="overlay" id="overlay">
             <div class="popup">
-                {{range .ImagePaths}}
-                    <a onclick="deleteImage({{.}})"><img src="{{.}}" alt="" width="5%">{{.}}</a>
-                    <p></p>
+                {{range . }}
+                <div class="management">
+                    <img src="{{.Path}}">
+                    <div class="buttons">
+                        <button type="button" onclick="deleteImage({{.Path}})">Delete</button>
+                        <button type="button" onclick="deleteImage({{.Path}})">Delete</button>
+                        <button type="button" onclick="deleteImage({{.Path}})">Delete</button>
+                    </div>
+                </div>
                 {{end}}
                 <button type="button" class="bottom-right-button" onclick="closePopup()">Close</button>
             </div>

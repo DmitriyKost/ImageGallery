@@ -15,12 +15,13 @@
     </div>
     <h1 style="text-align: center;">Journal</h1>
     <div class="column">
-    {{range .ImagePaths}}
-        <a onclick="onClick()"><img src="{{.}}" width="100%" alt="Image"></a>
+    {{range . }}
+        {{with .Description.String}}
+            <a onclick="onClick({{.Description.String}})"><img src="{{.Path}}" width="100%" alt="Image"></a>
+        {{else}}
+            <a><img src="{{.Path}}" width="100%" alt="Image"></a>
+        {{end}}
     {{end}}
-        <video width="100%" controls>
-            <source src="/static/videos/MVI_8282.AVI">
-        </video>
     </div>
     <script src="static/js/imageOnClick.js"></script>
 </body>

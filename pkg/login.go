@@ -15,7 +15,7 @@ var jwtKey []byte = []byte(os.Getenv("JWT_KEY"))
 
 var users map[string]string = map[string]string {
 	os.Getenv("ADMIN_LOGIN"): os.Getenv("ADMIN_PASSWORD"),
-    }
+}
 
 
 type Credentials struct {

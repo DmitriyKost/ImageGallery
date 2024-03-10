@@ -67,3 +67,33 @@ button:hover {
     right: 2.5%;
     margin: 10px; 
 }
+.management {
+    display: flex;
+    align-items: center; 
+    margin-bottom: 10px;
+}
+
+.management img {
+    margin-right: 10px;
+    width: 20%;
+}
+
+.buttons {
+    padding 5px;
+    width: 20%;
+}
+
+.buttons button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 80%;
+    width: 80%;
+}
+
+.buttons button:hover {
+    background-color: #45a049;
+}

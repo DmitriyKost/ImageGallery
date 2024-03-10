@@ -7,8 +7,11 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
 	"slices"
 	"strings"
+
+	"github.com/DmitriyKost/ImageGallery/pkg/database"
 )
 
 type Response struct {
@@ -29,8 +32,20 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
     }
     defer file.Close()
 
-    // TODO handle videos
-    newFile, err := os.Create("static/images/journal/" + handler.Filename)
+    ft, err := fileType(handler.Filename)
+    if err != nil {
+        http.Error(w, "Unknown file extension", http.StatusBadRequest)
+        return
+    }
+
+    err, freq := fileFreq(handler.Filename)
+    if err != nil {
+        fmt.Println("Error walking directories")
+    }
+
+    prefix := fmt.Sprintf("(%d)", freq)
+
+    newFile, err := os.Create("static/" + ft + "/journal/" + prefix + handler.Filename)
     if err != nil {
         http.Error(w, "Error creating file", http.StatusInternalServerError)
         return
@@ -43,7 +58,13 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    response := Response{Message: "Image uploaded successfully"}
+    err = database.InsertItem("static/" + ft + "/journal/" + prefix + handler.Filename)
+    if err != nil {
+        http.Error(w, "Database error while inserting file", http.StatusInternalServerError)
+        return
+    }
+
+    response := Response{Message: "File uploaded successfully"}
     jsonResponse, err := json.Marshal(response)
     if err != nil {
         http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
@@ -70,13 +91,16 @@ func ReplaceIndexImageHandler(w http.ResponseWriter, r *http.Request) {
 
     matches, err := filepath.Glob("static/images/index_image.*")
     if err != nil {
-        http.Error(w, "Error replacing index_image", http.StatusInternalServerError)
+        fmt.Println("No image to replace")
     }
     if len(matches) > 0 {
+        database.DeleteFromDB(matches[0])
         os.Remove(matches[0])
     }
 
-    fileExt := strings.Split(handler.Filename, ".")[1]
+
+    fileParts := strings.Split(handler.Filename, ".")
+    fileExt := fileParts[len(fileParts)-1]
     newFileName := "index_image." + fileExt
 
     newFile, err := os.Create("static/images/" + newFileName)
@@ -91,6 +115,8 @@ func ReplaceIndexImageHandler(w http.ResponseWriter, r *http.Request) {
         http.Error(w, "Error copying file", http.StatusInternalServerError)
         return
     }
+
+    database.InsertItem("static/images/" + newFileName)
 
     response := Response{Message: "Image replaced successfully"}
     jsonResponse, err := json.Marshal(response)
@@ -121,6 +147,8 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+    database.DeleteFromDB(path)
+
     err = os.Remove(path)
     if err != nil {
         http.Error(w, fmt.Sprintf("Error while deleting: %s", err), http.StatusInternalServerError)
@@ -146,4 +174,55 @@ func isPathSecure(path string) bool {
         return false
     }
     return true
+}
+
+// Checks for the supported image/video format and determines filetype, or returns an error if unknown file format
+func fileType(filename string) (string, error) {
+	lowercaseFilename := strings.ToLower(filename)
+
+	if strings.HasSuffix(lowercaseFilename, ".mp4") ||
+		strings.HasSuffix(lowercaseFilename, ".avi") ||
+		strings.HasSuffix(lowercaseFilename, ".mov") {
+        return "videos", nil
+	} else if strings.HasSuffix(lowercaseFilename, ".jpg") ||
+		strings.HasSuffix(lowercaseFilename, ".jpeg") ||
+		strings.HasSuffix(lowercaseFilename, ".png") ||
+		strings.HasSuffix(lowercaseFilename, ".gif") {
+        return "images", nil
+	} else {
+        return "", fmt.Errorf("Unknown file extension")
+	}
+}
+
+func fileFreq(filename string) (error, int) {
+    escapedFilename := regexp.QuoteMeta(filename)
+	pattern1 := escapedFilename
+	pattern2 := fmt.Sprintf(`\(\d+\)%s`, escapedFilename)
+    matches := 0
+    matcher := func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		matched, err := regexp.MatchString(pattern1, info.Name())
+		if err != nil {
+			return err
+		}
+
+		matched2, err := regexp.MatchString(pattern2, info.Name())
+		if err != nil {
+			return err
+		}
+
+		if matched || matched2 {
+            matches++
+		}
+
+		return nil
+	}
+    err := filepath.Walk("static/", matcher)
+	if err != nil {
+		return err, -1
+	}
+    return nil, matches
 }

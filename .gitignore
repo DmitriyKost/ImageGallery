@@ -3,4 +3,4 @@ main
 /static/videos/
 creds.env
 variables.env
-database.db
+db.db

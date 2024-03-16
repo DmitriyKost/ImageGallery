@@ -10,12 +10,13 @@
     <div class="top-right-refs">
         <a href="/projects">Projects</a>
         <a href="/journal">Journal</a>
+        <a href="/videos">Videos</a>
         <a href="/about">About</a>
     </div>
     <h1 style="text-align: center;">Valeriy Taouk</h1>
-    <div style="text-align: center;">
+    <div class="img-container">
         {{ with .Path }}
-            <img width="700" src={{ . }}>
+            <img width="50%" src={{ . }}>
         {{else}}
             <script>
                 alert("There's no index image please upload one")

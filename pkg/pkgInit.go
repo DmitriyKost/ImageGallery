@@ -21,6 +21,7 @@ func init() {
 func InitRoutes() {
     http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
     http.HandleFunc("/", IndexHandler)
+    http.HandleFunc("/edit_desc", EditDescHandler)
     http.HandleFunc("/journal", JournalHandler)
     http.HandleFunc("/videos", VideoJournalHandler)
     http.HandleFunc("/projects", ProjectsHandler)
@@ -30,4 +31,5 @@ func InitRoutes() {
     http.Handle("/upload", AuthMiddleWare(http.HandlerFunc(UploadHandler)))
     http.Handle("/replace_idx", AuthMiddleWare(http.HandlerFunc(ReplaceIndexImageHandler)))
     http.Handle("/delete", AuthMiddleWare(http.HandlerFunc(DeleteHandler)))
+    // http.Handle("/edit_desc", AuthMiddleWare(http.HandlerFunc(EditDescHandler)))
 }

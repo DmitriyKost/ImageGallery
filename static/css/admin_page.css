@@ -79,7 +79,7 @@ button:hover {
 }
 
 .buttons {
-    padding 5px;
+    padding: 5px;
     width: 20%;
 }
 
@@ -96,4 +96,27 @@ button:hover {
 
 .buttons button:hover {
     background-color: #45a049;
+}
+
+.buttons input {
+    margin-top: 5px;
+    width: 80%;
+    font-size: 15px;
+}
+
+.descriptionEditor {
+    padding: 5px;
+    margin: 5px;
+}
+
+.descriptionEditor button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 80%;
+    width: 20%;
 }

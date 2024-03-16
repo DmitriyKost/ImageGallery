@@ -11,16 +11,13 @@
     <div class="top-right-refs">
         <a href="/">HomePage</a>
         <a href="/projects">Projects</a>
+        <a href="/videos">Videos</a>
         <a href="/about">About</a>
     </div>
-    <h1 style="text-align: center;">Journal</h1>
+    <h1>Journal</h1>
     <div class="column">
     {{range . }}
-        {{with .Description.String}}
-            <a onclick="onClick({{.Description.String}})"><img src="{{.Path}}" width="100%" alt="Image"></a>
-        {{else}}
-            <a><img src="{{.Path}}" width="100%" alt="Image"></a>
-        {{end}}
+        <img src="{{.Path}}" width="100%" alt="Image">
     {{end}}
     </div>
     <script src="static/js/imageOnClick.js"></script>

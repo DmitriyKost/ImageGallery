@@ -11,6 +11,7 @@
             <a href="/">HomePage</a>
             <a href="/projects">Projects</a>
             <a href="/journal">Journal</a>
+            <a href="/videos">Videos</a>
             <a href="/about">About</a>
         </div>
 
@@ -20,16 +21,23 @@
         <input type="file" id="replaceImg" style="display: none">
         <button type="button" id="replacebtn">Replace/Upload index image</button>
 
-        <button type="button" onclick="openPopup()">Delete image</button>
+        <button type="button" onclick="openPopup()">Manage items</button>
         <div class="overlay" id="overlay">
             <div class="popup">
                 {{range . }}
                 <div class="management">
                     <img src="{{.Path}}">
                     <div class="buttons">
+                        <header>{{.Path}}</header>
                         <button type="button" onclick="deleteImage({{.Path}})">Delete</button>
-                        <button type="button" onclick="deleteImage({{.Path}})">Delete</button>
-                        <button type="button" onclick="deleteImage({{.Path}})">Delete</button>
+                        <button type="button" onclick="openDescriptionEditor({{.Path}})">Edit Description</button>
+                    </div>
+                    <div id="descriptionEditor_{{.Path}}" class="descriptionEditor" style="display: none;">
+                        <textarea id="descriptionTextarea_{{.Path}}" rows=9 cols=60 >{{.Description.String}}</textarea>
+                        <div style="display: flex;">
+                            <button type="button" onclick="saveDescription({{.Path}})">Save</button>
+                            <button type="button" onclick="closeDescriptionEditor({{.Path}})">Close</button>
+                        </div>
                     </div>
                 </div>
                 {{end}}
@@ -40,3 +48,4 @@
         <script src="static/js/login.js"></script>
     </body>
 </html>
+

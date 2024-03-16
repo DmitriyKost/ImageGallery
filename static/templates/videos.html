@@ -11,16 +11,20 @@
     <div class="top-right-refs">
         <a href="/">HomePage</a>
         <a href="/projects">Projects</a>
+        <a href="/journal">Journal</a>
         <a href="/about">About</a>
     </div>
-    <h1 style="text-align: center;">Videos</h1>
+    <h1>Videos</h1>
     <div class="column">
     {{range . }}
-        {{with .Description.String}}
-            <a><video src="{{.Path}}" width="100%" alt="Image" controls></a>
-        {{else}}
-            <a><video src="{{.Path}}" width="100%" alt="Video", controls></a>
-        {{end}}
+        <div class="row">
+            <div class="container">
+                <p>{{.Description.String}}</p>
+            </div>
+            <div class="container">
+                <video src="{{.Path}}" width="50%" alt="Video" controls>
+            </div>
+        </div>
     {{end}}
     </div>
 </body>

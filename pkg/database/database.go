@@ -79,7 +79,7 @@ func InitDatabase() error {
 }
 
 func GetAll() ([]Item, error) {
-    rows, err := Database.Query("SELECT id, name, path, description FROM images UNION SELECT id, name, path, description FROM videos;")
+    rows, err := Database.Query("SELECT id, path, description FROM images UNION SELECT id, path, description FROM videos;")
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func GetAll() ([]Item, error) {
     var items []Item
 	for rows.Next() {
         var item Item
-		err := rows.Scan(&item.Id, &item.Name, &item.Path, &item.Description)
+		err := rows.Scan(&item.Id, &item.Path, &item.Description)
 		if err != nil {
 			return nil, err
 		}
@@ -99,7 +99,7 @@ func GetAll() ([]Item, error) {
 }
 
 func GetAllImages() ([]Image, error) {
-	rows, err := Database.Query("SELECT id, name, path, description FROM images;")
+	rows, err := Database.Query("SELECT id, path, description FROM images;")
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func GetAllImages() ([]Image, error) {
     var images []Image
 	for rows.Next() {
         var image Image
-		err := rows.Scan(&image.Id, &image.Name, &image.Path, &image.Description)
+		err := rows.Scan(&image.Id, &image.Path, &image.Description)
 		if err != nil {
 			return nil, err
 		}
@@ -118,7 +118,7 @@ func GetAllImages() ([]Image, error) {
 }
 
 func GetAllVideos() ([]Video, error) {
-	rows, err := Database.Query("SELECT id, name, path, description FROM videos;")
+	rows, err := Database.Query("SELECT id, path, description FROM videos;")
 	if err != nil {
 		return nil, err
 	}
@@ -127,7 +127,7 @@ func GetAllVideos() ([]Video, error) {
     var videos []Video
 	for rows.Next() {
         var video Video
-		err := rows.Scan(&video.Id, &video.Name, &video.Path, &video.Description)
+		err := rows.Scan(&video.Id, &video.Path, &video.Description)
 		if err != nil {
 			return nil, err
 		}
@@ -144,8 +144,8 @@ func GetJournalImages() (error, []Image) {
     }
     for _, path := range paths {
         var image Image
-        row := Database.QueryRow("SELECT id, name, path, description FROM images WHERE path = ?", path)
-        err := row.Scan(&image.Id, &image.Name, &image.Path, &image.Description)
+        row := Database.QueryRow("SELECT id, path, description FROM images WHERE path = ?", path)
+        err := row.Scan(&image.Id, &image.Path, &image.Description)
         if err != nil {
             return err, nil
         }
@@ -162,8 +162,8 @@ func GetJournalVideos() (error, []Video) {
     }
     for _, path := range paths {
         var video Video
-        row := Database.QueryRow("SELECT id, name, path, description FROM videos WHERE path = ?", path)
-        err := row.Scan(&video.Id, &video.Name, &video.Path, &video.Description)
+        row := Database.QueryRow("SELECT id, path, description FROM videos WHERE path = ?", path)
+        err := row.Scan(&video.Id, &video.Path, &video.Description)
         if err != nil {
             return err, nil
         }
@@ -178,8 +178,8 @@ func GetIndexImage() (error, Image) {
     if err != nil {
         return err, idxImage
     }
-    row := Database.QueryRow("SELECT id, name, path, description FROM images WHERE path = ?", path)
-    err = row.Scan(&idxImage.Id, &idxImage.Name, &idxImage.Path, &idxImage.Description)
+    row := Database.QueryRow("SELECT id, path, description FROM images WHERE path = ?", path)
+    err = row.Scan(&idxImage.Id, &idxImage.Path, &idxImage.Description)
     if err != nil {
         return err, idxImage
     }
@@ -208,6 +208,9 @@ func InsertItem(path string) error {
 }
 
 func EditDescription(path string, description string) error {
+    mutex.Lock()
+    defer mutex.Unlock()
+
     toEdit := strings.Split(path, "/")[1] // path usually looks like "static/videos" or "static/images"
     query := "UPDATE " + toEdit + " SET description = ? WHERE path = ?"
     _, err := Database.Exec(query, description, path);

@@ -72,6 +72,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
     }
 
     w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusOK)
     w.Write(jsonResponse)
 }
 
@@ -126,6 +127,7 @@ func ReplaceIndexImageHandler(w http.ResponseWriter, r *http.Request) {
     }
 
     w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusOK)
     w.Write(jsonResponse)
 }
 
@@ -155,10 +157,50 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+    response := Response{Message: "Successfully deleleted"}
+    jsonResponse, err := json.Marshal(response)
+    if err != nil {
+        http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
+        return
+    }
+
     w.Header().Set("Content-Type", "application/json")
     w.WriteHeader(http.StatusOK)
-    w.Write([]byte(`{"message: Successfully deleted"}`))
+    w.Write(jsonResponse)
 }
+
+func EditDescHandler(w http.ResponseWriter, r *http.Request) {
+    if r.Method != http.MethodPatch {
+        http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+        return
+    }
+
+    if err := r.ParseForm(); err != nil {
+        http.Error(w, "Error parsing form data", http.StatusBadRequest)
+        return
+    }
+
+    desc, path := r.Form.Get("desc"), r.Form.Get("path")
+
+    if !isPathSecure(path) {
+        http.Error(w, "Path is invalid", http.StatusBadRequest)
+        return
+    }
+
+    database.EditDescription(path, desc)
+
+    response := Response{Message: "Successfully updated"}
+    jsonResponse, err := json.Marshal(response)
+    if err != nil {
+        http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
+        return
+    }
+
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusOK)
+    w.Write(jsonResponse)
+}
+
 
 func isPathSecure(path string) bool {
     formats := []string{ "images", "videos" }

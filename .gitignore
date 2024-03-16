@@ -1,6 +1,6 @@
 main
 /static/images/
 /static/videos/
-creds.env
-variables.env
+/config/creds.env
+/config/variables.env
 db.db

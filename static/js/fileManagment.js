@@ -81,3 +81,46 @@ function deleteImage(imgPath) {
         window.location.reload();
     })
 }
+
+function editDescription(path, desc) {
+    fetch("/edit_desc", {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            path: path,
+            desc: desc,
+        }),
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then((data) => {
+        console.log(data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+var prevDescriptions = new Map();
+function openDescriptionEditor(path) {
+    document.getElementById('descriptionEditor_' + path).style.display = 'block';
+    prevDescriptions.set(path, document.getElementById('descriptionTextarea_' + path).value);
+}
+
+function saveDescription(path) {
+    let description = document.getElementById('descriptionTextarea_' + path).value;
+    editDescription(path, description);
+    document.getElementById('descriptionEditor_' + path).style.display = 'none';
+}
+
+function closeDescriptionEditor(path) {
+    document.getElementById('descriptionEditor_' + path).style.display = 'none';
+    document.getElementById('descriptionTextarea_' + path).value = prevDescriptions.get(path);
+    prevDescriptions.delete(path);
+}

@@ -5,13 +5,27 @@ body {
 }
 
 .column {
-  flex: 50%;
-  padding: 0 4px;
+    display: flex;
+    flex-direction: column;
 }
 
-.column video {
-  margin-top: 4px;
-  vertical-align: middle;
+.row {
+    border: 2px solid gray;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    margin-top: 40px;
+}
+
+.container {
+    margin: 20px;
+    width: 50%;
+}
+
+.container video {
+    width: 100%;
+    border-radius: 5px;
+    border: 3px solid #000;
 }
 
 .top-right-refs {
